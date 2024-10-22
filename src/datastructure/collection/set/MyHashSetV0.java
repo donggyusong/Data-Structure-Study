@@ -12,10 +12,10 @@ public class MyHashSetV0 {
      * 중복 데이터 검색O(n) + 데이터 입력O(1) -> O(n+1) 상수무시 -> O(n)
      */
     public boolean add(int value) {
-        if (contains(value)) {
+        if (contains(value)) { //O(n)
             return false;
         }
-        elementData[size] = value;
+        elementData[size] = value; //O(1)
         size++;
         return true;
     }
