@@ -13,10 +13,10 @@ public class MyLinkedListV1Main {
         System.out.println(list);
 
         System.out.println("== 기능 사용 ==");
-        System.out.println(list.size());
-        System.out.println(list.get(1));
-        System.out.println(list.indexOf("c"));
-        System.out.println(list.set(2, "z"));
+        System.out.println("list.size() = "+list.size()); //3
+        System.out.println("list.get(1) = " + list.get(1)); //b
+        System.out.println("list.indexOf('c') = " + list.indexOf("c")); //2
+        System.out.println("list.set(2,'z') oldValue = " + list.set(2, "z")); //c
         System.out.println(list);
 
         System.out.println("== 범위 초과 ==");

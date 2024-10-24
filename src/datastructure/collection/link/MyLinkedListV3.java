@@ -1,8 +1,8 @@
 package datastructure.collection.link;
 
-public class MyLinkedListV2 {
+public class MyLinkedListV3<E> {
 
-    private Node first;
+    private Node<E> first;
     private int size=0;
 
     /**
@@ -14,43 +14,63 @@ public class MyLinkedListV2 {
      * => 마지막 노드를 찾는데 O(n)이 걸린다. 마지막 노드에 새로운 노드르 추가하는데 O(1)이 걸린다.
      *    O(n+1) -> 상수 무시 후 O(n)
      */
-    public void add(Object object) {
-        if (size != 0) {
-            //마지막 노드를 가져온다.
-            Node lastNode = getLastNode();
-            lastNode.next = new Node(object);
-        }else{
-            //노드가 하나도 없을 경우
-            first = new Node(object);
+    public void add(E e) {
+        Node<E> newNode = new Node<>(e);
+        if (first == null) {
+            first = newNode;
+        } else{
+            Node<E> lastNode = getLastNode();
+            lastNode.next = newNode;
         }
         size++;
     }
 
-    //추가 코드
-    public void add(int index, Object e) {
-        Node newNode = new Node(e);
+    private Node<E> getLastNode() {
+        Node<E> x = first;
+        while (x.next != null) {
+            x = x.next;
+        }
+        return x;
+    }
+
+    public void add(int index, E e) {
+        Node<E> newNode = new Node<>(e);
         if (index == 0) {
             //index == 0
             newNode.next = first;
             first = newNode;
         }else{
             //index != 0
-            Node prevNode = getNode(index - 1);
+            Node<E> prevNode = getNode(index - 1);
             newNode.next = prevNode.next;
             prevNode.next = newNode;
         }
         size++;
     }
 
-    //추가 코드
-    public Object remove(int index) {
-        Node removeNode = getNode(index);
-        Object removeItem = removeNode.item;
+    /**
+     * 특정 위치에 있는 데이터를 찾아서 변경한다. 그리고 기존값을 반환한다.
+     * getNode(index)를 통해 특정 위치에 있는 노드를 찾고,단순히 그 노드에 있는 item 데이터를 변경한다.
+     *
+     * 시간복잡도 O(n)
+     */
+    public E set(int index, E element) {
+        Node<E> indexNode = getNode(index);
+        E oldValue = indexNode.item;
 
+        indexNode.item = element;
+
+        return oldValue;
+    }
+
+    //추가 코드
+    public E remove(int index) {
+        Node<E> removeNode = getNode(index);
+        E removeItem = removeNode.item;
         if (index == 0) {
             first = removeNode.next;
         }else{
-            Node prevNode = getNode(index - 1);
+            Node<E> prevNode = getNode(index - 1);
             prevNode.next = removeNode.next;
         }
         removeNode.item = null;
@@ -60,37 +80,12 @@ public class MyLinkedListV2 {
         return removeItem;
     }
 
-    private Node getLastNode() {
-        Node x = first;
-
-        while (x.next != null) {
-            x = x.next;
-        }
-
-        return x;
-    }
-
-    /**
-     * 특정 위치에 있는 데이터를 찾아서 변경한다. 그리고 기존값을 반환한다.
-     * getNode(index)를 통해 특정 위치에 있는 노드를 찾고,단순히 그 노드에 있는 item 데이터를 변경한다.
-     *
-     * 시간복잡도 O(n)
-     */
-    public Object set(int index, Object element) {
-        Node indexNode = getNode(index);
-        Object oldValue = indexNode.item;
-
-        indexNode.item = element;
-
-        return oldValue;
-    }
-
     /**
      * 특정 위치에 있는 데이터를 반환한다.
      * getNode(index)를 통해 측정 위치에 있는 노드를 찾고,해당 노드에 있는 값을 반환한다.
      */
-    public Object get(int index) {
-        Node indexNode = getNode(index);
+    public E get(int index) {
+        Node<E> indexNode = getNode(index);
         return indexNode.item;
     }
 
@@ -101,9 +96,8 @@ public class MyLinkedListV2 {
      *    하지만 연결 리스트에서 사용하는 노드들은 배열이 아니다. 단지 다음 노드에 대한 참조만 있을 뿐이다.
      *    따라서 인덱스로 원하는 위치의 데이터를 찾으려면 인덱스 숫자 만큼 다음 노드를 반복해서 찾아야한다. 따라서 인덱스 조회 성능이 나쁘다.
      */
-    private Node getNode(int index) {
-        Node x = first;
-
+    private Node<E> getNode(int index) {
+        Node<E> x = first;
         for (int i = 0; i < index; i++) {
             x = x.next;
         }
@@ -117,19 +111,16 @@ public class MyLinkedListV2 {
      *
      * 시간복잡도 O(n)
      */
-    public int indexOf(Object o) {
-        Node x = first;
+    public int indexOf(E o) {
         int index = 0;
-
-        while (true) {
-            if (x.item.equals(o)) {
-                break;
+        for (Node<E> x = first; x != null; x = x.next) {
+            if (o.equals(x.item)) {
+                return index;
             }
-            x = x.next;
             index++;
         }
 
-        return index;
+        return -1;
     }
 
     public int size() {
@@ -138,9 +129,37 @@ public class MyLinkedListV2 {
 
     @Override
     public String toString() {
-        return "MyLinkedListV2{" +
+        return "MyLinkedListV3{" +
                 "first=" + first +
                 ", size=" + size +
                 '}';
+    }
+
+    private static class Node<E>{
+        E item;
+        Node<E> next;
+
+        public Node(E item) {
+            this.item = item;
+        }
+
+        @Override
+        public String toString() {
+
+            StringBuilder sb = new StringBuilder();
+            Node<E> temp = this;
+            sb.append("[");
+            while(temp != null){
+                sb.append(temp.item);
+                if (temp.next != null) {
+                    sb.append("->");
+                }
+                temp = temp.next;
+            }
+            sb.append("]");
+
+            return sb.toString();
+
+        }
     }
 }
