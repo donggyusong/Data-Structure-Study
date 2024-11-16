@@ -21,7 +21,7 @@ public class MyHashSetV0 {
     }
 
 
-    //O(n) -> 배열에 있는 모든 데이터를 찾고 비교해야 하므로 평균 O(n)이 걸린다. -> 성능에 발목을 잡음 -> 해쉬 알고리즘 사용하자
+    //O(n) -> 배열에 있는 모든 데이터를 찾고 비교해야 하므로 평균 O(n)이 걸린다 -> 성능에 발목을 잡음 -> 해쉬 알고리즘 사용하자
     public boolean contains(int value) {
         for (int data : elementData) {
             if (data == value) {

@@ -24,6 +24,7 @@ public class HashAndEqualMain1 {
         //검색 실패
         MemberNoHashNoEq searchValue = new MemberNoHashNoEq("A");
         System.out.println("searchValue.hashCode() = " + searchValue.hashCode());
+
         /**
          * searchValue의 해시코드가 어떻게 나오느냐에따라 같은 hashIndex가 같을 수 있고 다를 수 있다.
          * - hashIndex가 같은 경우
